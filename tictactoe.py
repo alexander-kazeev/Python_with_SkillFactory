@@ -30,9 +30,7 @@ def user_move():
         if len(user_input) != 2 or (not user_input.isdigit()):
             print("Некорректный ход!")
             continue
-        row, col = user_input
-        row = int(row)
-        col = int(col)
+        row, col = map(int, user_input)
         if (not (0 <= row <= 2)) or (not (0 <= col <= 2)):
             print("Некорректный ход! Код строки и код колонки должны быть числами от 0 до 2!")
             continue
