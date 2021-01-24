@@ -40,8 +40,8 @@ def user_move():
         return row, col
 
 
-# функция проверки на выигрыш
-def check_win():
+# функция проверки на выигрыш для того пользователя, который сейчас ходил
+def check_win(user_sign):
     # Создаем новые пустые списки для проверки диагоналей
     diag = []
     rotated_diag = []
@@ -51,11 +51,7 @@ def check_win():
 
     for i in range(3):
         # Проверка на выигрыш строк и колонок
-        if game_field[i].count("X") == 3 or rotaded_game_field[i].count("X") == 3:
-            print("Поздравляем! Крестик выиграл!")
-            return True
-        if game_field[i].count("0") == 3 or rotaded_game_field[i].count("0") == 3:
-            print("Поздравляем! Нолик выиграл!")
+        if game_field[i].count(user_sign) == 3 or rotaded_game_field[i].count(user_sign) == 3:
             return True
 
         # Набор значений в списки для последующей проверки диагоналей
@@ -63,13 +59,13 @@ def check_win():
         rotated_diag.append(rotaded_game_field[i][i])
 
     # Проверка на выигрыш диагоналей
-    if diag.count("X") == 3 or rotated_diag.count("X") == 3:
-        print("Поздравляем! Крестик выиграл!")
+    if diag.count(user_sign) == 3 or rotated_diag.count(user_sign) == 3:
         return True
 
-    if diag.count("0") == 3 or rotated_diag.count("0") == 3:
-        print("Поздравляем! Нолик выиграл!")
-        return True
+
+# Функция получение имени игрока (крестик или нолик) в зависимости от номера хода
+def user_name(move_count):
+    return "Крестик" if move_count % 2 == 1 else "Нолик"
 
 
 # Запуск игры
@@ -91,24 +87,25 @@ while True:
     # Увеличение счетчика текущего хода
     move_count += 1
 
-    # Вывод в консоль того, кто сейчас ходит. Нечетный ход - крестик, четный ход - нолик.
-    print("Ход", "крестиком" if move_count % 2 == 1 else "ноликом")
+    # Пользовательский знак. Нечетный ход - крестик, четный ход - нолик.
+    user_sign = "X" if move_count % 2 == 1 else "0"
+
+    # Вывод в консоль того, кто сейчас ходит.
+    print(f"Ходит {user_name(move_count)}")
 
     # ход пользователя, получение от пользователя кодов строки и колонки
     row, col = user_move()
 
     # запись хода пользователя в игровое поле
-    if move_count % 2 == 1:
-        game_field[row][col] = "X"
-    else:
-        game_field[row][col] = "0"
+    game_field[row][col] = user_sign
 
     # обновление игрового поля, выводимого в консоль, с учетом всех сделанных ходов
     show_game_field()
 
     if move_count >= 5:  # Раньше 5-го хода выиграть невозможно
         # Проверка на наличие выигравшего
-        if check_win():
+        if check_win(user_sign):
+            print(f"Поздравляем! {user_name(move_count)} выиграл!")
             break
 
         # Если все клетки заполнены и победителя нет, значит, ничья
