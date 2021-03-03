@@ -26,7 +26,7 @@ def values(message: telebot.types.Message):
 def convert(message: telebot.types.Message):
     try:
         # Разбиваем введеное пользователем на элементы списка в нижнем регистре
-        inputs = list(map(str.lower, message.text.split(' ')))
+        inputs = list(map(str.lower, message.text.split()))
 
         # Проверяем количество введенных параметров
         if len(inputs) != 3:
